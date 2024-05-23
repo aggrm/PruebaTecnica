@@ -1,0 +1,422 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "User Houses API",
+      "description": "API for managing users and their houses."
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "Usuarios",
+        "description": "API para gestionar usuarios"
+      },
+      {
+        "name": "Viviendas",
+        "description": "API para gestionar viviendas de usuarios"
+      }
+    ],
+    "schemes": ["http"],
+    "paths": {
+      "/users/register": {
+        "post": {
+          "tags": ["Usuarios"],
+          "summary": "Crear un nuevo usuario",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Usuario creado correctamente"
+            },
+            "400": {
+              "description": "Error en la creación del usuario"
+            }
+          }
+        }
+      },
+      "/users/login": {
+        "post": {
+          "tags": ["Usuarios"],
+          "summary": "Autenticar usuario y obtener token",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Login"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuario autenticado correctamente"
+            },
+            "401": {
+              "description": "Credenciales inválidas"
+            }
+          }
+        }
+      },
+      "/users": {
+        "get": {
+          "tags": ["Usuarios"],
+          "summary": "Obtener todos los usuarios",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista de usuarios"
+            },
+            "401": {
+              "description": "No autorizado"
+            }
+          }
+        }
+      },
+      "/users/{userId}": {
+        "get": {
+          "tags": ["Usuarios"],
+          "summary": "Obtener un usuario por ID",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Detalles del usuario"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            },
+            "401": {
+              "description": "No autorizado"
+            }
+          }
+        },
+        "patch": {
+          "tags": ["Usuarios"],
+          "summary": "Actualizar parcialmente un usuario",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserUpdate"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuario actualizado"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            },
+            "401": {
+              "description": "No autorizado"
+            }
+          }
+        },
+        "put": {
+          "tags": ["Usuarios"],
+          "summary": "Actualizar completamente un usuario",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuario actualizado"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            },
+            "401": {
+              "description": "No autorizado"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Usuarios"],
+          "summary": "Eliminar un usuario",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Usuario eliminado"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            },
+            "400": {
+              "description": "El usuario tiene viviendas asociadas"
+            },
+            "401": {
+              "description": "No autorizado"
+            }
+          }
+        }
+      },
+      "/users/{userId}/houses": {
+        "get": {
+          "tags": ["Viviendas"],
+          "summary": "Obtener todas las viviendas de un usuario",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "city",
+              "in": "query",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "street",
+              "in": "query",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "country",
+              "in": "query",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista de viviendas"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Viviendas"],
+          "summary": "Crear una vivienda para un usuario",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/House"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Vivienda creada"
+            },
+            "400": {
+              "description": "Error en la creación de la vivienda"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            }
+          }
+        }
+      },
+      "/users/{userId}/houses/{houseId}": {
+        "put": {
+          "tags": ["Viviendas"],
+          "summary": "Actualizar una vivienda",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "houseId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/House"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Vivienda actualizada"
+            },
+            "400": {
+              "description": "Error en la actualización"
+            },
+            "404": {
+              "description": "Vivienda no encontrada"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Viviendas"],
+          "summary": "Eliminar una vivienda",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "houseId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Vivienda eliminada"
+            },
+            "404": {
+              "description": "Vivienda no encontrada"
+            },
+            "400": {
+              "description": "Error en la eliminación"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "House": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+  
